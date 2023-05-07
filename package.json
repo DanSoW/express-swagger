@@ -1,0 +1,61 @@
+{
+  "name": "express-swagger",
+  "version": "0.0.1",
+  "description": "Основной сервер",
+  "main": "index.js",
+  "type": "module",
+  "author": {
+    "name": "Solopov Daniil <swdaniel@yandex.ru>"
+  },
+  "scripts": {
+    "start": "cross-env NODE_ENV=production nodemon index.js",
+    "start:dev": "nodemon index.js",
+    "dev": "cross-env NODE_ENV=development concurrently \"npm run start:dev\"",
+    "generate:doc": "node generate-doc.js",
+    "__comment upd pkg__": "Скрипт запускающий процесс обновления пакетов",
+    "update:packages:windows": "node wipe-dependencies.js && rd /s node_modules && npm update --save-dev && npm update --save",
+    "update:packages:linux": "node wipe-dependencies.js && rm -r node_modules && npm update --save-dev && npm update --save"
+  },
+  "keywords": [
+    "postgresql",
+    "react",
+    "nodejs",
+    "express"
+  ],
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "config": "^3.3.9",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-validator": "^7.0.1",
+    "googleapis": "^118.0.0",
+    "json2yaml": "^1.1.0",
+    "jsonwebtoken": "^9.0.0",
+    "node-fetch": "^3.3.1",
+    "node-geocoder": "^4.2.0",
+    "node-unique-id-generator": "^0.1.0",
+    "nodemailer": "^6.9.1",
+    "pg": "^8.10.0",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.31.0",
+    "socket.io": "^4.6.1",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^4.6.3",
+    "swagger2openapi": "^7.0.8",
+    "uuid": "^9.0.0",
+    "winston": "^3.8.2",
+    "yamljs": "^0.3.0"
+  },
+  "devDependencies": {
+    "concurrently": "^8.0.1",
+    "cross-env": "^7.0.3",
+    "express-swagger-generator": "^1.1.17",
+    "nodemon": "^2.0.22",
+    "oas3-tools": "^2.2.3",
+    "sequelize-cli": "^6.6.0",
+    "swagger-autogen": "^2.23.1"
+  }
+}

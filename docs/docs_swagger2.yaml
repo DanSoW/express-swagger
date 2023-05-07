@@ -1,0 +1,387 @@
+---
+info:
+  description: "Данный сервис определяет основные пользовательские функции"
+  title: "Основной игровой сервис"
+  version: "1.0.0"
+  contact:
+    email: "swdaniel@yandex.ru"
+host: "localhost:5000"
+basePath: "/"
+produces:
+  - "application/json"
+  - "application/xml"
+schemes:
+  - "http"
+  - "https"
+securityDefinitions:
+  JWT:
+    type: "apiKey"
+    in: "header"
+    name: "Authorization"
+    description: ""
+externalDocs:
+  description: "Ссылка на внешнюю документацию"
+  url: "http://localhost:5000/api-docs"
+swagger: "2.0"
+paths:
+  /auth/sign-up:
+    post:
+      parameters:
+        - name: "input"
+          in: "body"
+          description: "Входные данные"
+          required: true
+          schema:
+            $ref: "#/definitions/SignUpDto"
+      description: "Регистрация пользователя"
+      tags:
+        - "Авторизация (пользователь)"
+      responses:
+        200:
+          description: "Авторизационные данные пользователя"
+          schema:
+            $ref: "#/definitions/AuthDto"
+        default:
+          description: "Ошибка запроса"
+          schema:
+            $ref: "#/definitions/ApiError"
+  /auth/sign-in:
+    post:
+      parameters:
+        - name: "input"
+          in: "body"
+          description: "Входные данные"
+          required: true
+          schema:
+            $ref: "#/definitions/SignInDto"
+      description: "Авторизация пользователя"
+      tags:
+        - "Авторизация (пользователь)"
+      responses:
+        200:
+          description: "Авторизационные данные пользователя"
+          schema:
+            $ref: "#/definitions/AuthDto"
+        default:
+          description: "Ошибка запроса"
+          schema:
+            $ref: "#/definitions/ApiError"
+  /auth/logout:
+    post:
+      parameters:
+        - name: "input"
+          in: "body"
+          description: "Входные данные"
+          required: true
+          schema:
+            $ref: "#/definitions/LogoutDto"
+      description: "Выход пользователя из системы"
+      tags:
+        - "Авторизация (пользователь)"
+      responses:
+        200:
+          description: "Флаг, определяющий успех операции выхода пользователя из системы"
+          schema:
+            $ref: "#/definitions/SuccessDto"
+        default:
+          description: "Ошибка запроса"
+          schema:
+            $ref: "#/definitions/ApiError"
+  /auth/management/sign-in:
+    post:
+      parameters:
+        - name: "input"
+          in: "body"
+          description: "Входные данные"
+          required: true
+          schema:
+            $ref: "#/definitions/SignInDto"
+      description: "Авторизация пользователя"
+      tags:
+        - "Авторизация (для управляющего сайта)"
+      responses:
+        200:
+          description: "Авторизационные данные пользователя"
+          schema:
+            $ref: "#/definitions/AuthDto"
+        default:
+          description: "Ошибка запроса"
+          schema:
+            $ref: "#/definitions/ApiError"
+  /auth/management/logout:
+    post:
+      parameters:
+        - name: "input"
+          in: "body"
+          description: "Входные данные"
+          required: true
+          schema:
+            $ref: "#/definitions/LogoutDto"
+      description: "Авторизация пользователя"
+      tags:
+        - "Авторизация (для управляющего сайта)"
+      responses:
+        200:
+          description: "Флаг, определяющий успех операции выхода пользователя из системы"
+          schema:
+            $ref: "#/definitions/SuccessDto"
+        default:
+          description: "Ошибка запроса"
+          schema:
+            $ref: "#/definitions/ApiError"
+  /auth/activate:
+    post:
+      parameters:
+        - name: "input"
+          in: "body"
+          description: "Входные данные"
+          required: true
+          schema:
+            $ref: "#/definitions/ActivationLinkDto"
+      description: "Выход пользователя из системы"
+      tags:
+        - "Авторизация (пользователь)"
+      responses:
+        200:
+          description: "Флаг, определяющий успех операции подтверждения пользователя"
+          schema:
+            $ref: "#/definitions/SuccessDto"
+        default:
+          description: "Ошибка запроса"
+          schema:
+            $ref: "#/definitions/ApiError"
+  /auth/refresh/token:
+    post:
+      parameters:
+        - name: "input"
+          in: "body"
+          description: "Входные данные"
+          required: true
+          schema:
+            $ref: "#/definitions/RefreshDto"
+      description: "Выход пользователя из системы"
+      tags:
+        - "Авторизация (пользователь)"
+      responses:
+        200:
+          description: "Авторизационные данные пользователя"
+          schema:
+            $ref: "#/definitions/AuthDto"
+        default:
+          description: "Ошибка запроса"
+          schema:
+            $ref: "#/definitions/ApiError"
+definitions:
+  ActivationLinkDto:
+    required:
+      - "activation_link"
+    properties:
+      activation_link:
+        type: "string"
+        description: ""
+  AttributeDto:
+    required:
+      - "read"
+      - "write"
+      - "update"
+      - "delete"
+    properties:
+      read:
+        type: "boolean"
+        description: ""
+      write:
+        type: "boolean"
+        description: ""
+      update:
+        type: "boolean"
+        description: ""
+      delete:
+        type: "boolean"
+        description: ""
+  AuthDto:
+    required:
+      - "tokens"
+      - "users_id"
+      - "type_auth"
+      - "refresh_token"
+      - "attributes"
+    properties:
+      tokens:
+        $ref: "#/definitions/TokenDto"
+      users_id:
+        type: "number"
+        description: ""
+      type_auth:
+        type: "number"
+        description: ""
+      refresh_token:
+        $ref: "#/definitions/ModuleDto"
+      attributes:
+        $ref: "#/definitions/AttributeDto"
+  LogoutDto:
+    required:
+      - "users_id"
+      - "access_token"
+      - "refresh_token"
+      - "type_auth"
+    properties:
+      users_id:
+        type: "number"
+        description: ""
+      access_token:
+        type: "string"
+        description: ""
+      refresh_token:
+        type: "string"
+        description: ""
+      type_auth:
+        type: "number"
+        description: ""
+  ModuleDto:
+    required:
+      - "player"
+      - "judge"
+      - "creator"
+      - "moderator"
+      - "manager"
+      - "admin"
+      - "super_admin"
+    properties:
+      player:
+        type: "boolean"
+        description: ""
+      judge:
+        type: "boolean"
+        description: ""
+      creator:
+        type: "boolean"
+        description: ""
+      moderator:
+        type: "boolean"
+        description: ""
+      manager:
+        type: "boolean"
+        description: ""
+      admin:
+        type: "boolean"
+        description: ""
+      super_admin:
+        type: "boolean"
+        description: ""
+  RefreshDto:
+    required:
+      - "refresh_token"
+      - "type_auth"
+    properties:
+      refresh_token:
+        type: "string"
+        description: ""
+      type_auth:
+        type: "number"
+        description: ""
+  SignInDto:
+    required:
+      - "email"
+      - "password"
+    properties:
+      email:
+        type: "string"
+        description: ""
+      password:
+        type: "string"
+        description: ""
+  SignUpDto:
+    required:
+      - "email"
+      - "password"
+      - "phone_num"
+      - "location"
+      - "date_birthday"
+      - "nickname"
+      - "name"
+      - "surname"
+    properties:
+      email:
+        type: "string"
+        description: ""
+      password:
+        type: "string"
+        description: ""
+      phone_num:
+        type: "string"
+        description: ""
+      location:
+        type: "string"
+        description: ""
+      date_birthday:
+        type: "string"
+        description: ""
+      nickname:
+        type: "string"
+        description: ""
+      name:
+        type: "string"
+        description: ""
+      surname:
+        type: "string"
+        description: ""
+  TokenDto:
+    required:
+      - "access_token"
+      - "refresh_token"
+    properties:
+      access_token:
+        type: "string"
+        description: ""
+      refresh_token:
+        type: "string"
+        description: ""
+  SuccessDto:
+    required:
+      - "success"
+    properties:
+      success:
+        type: "boolean"
+        description: ""
+  ApiError:
+    required:
+      - "message"
+      - "errors"
+    properties:
+      message:
+        type: "string"
+        description: ""
+      errors:
+        type: "array"
+        items:
+          $ref: "#/definitions/FieldError"
+  FieldError:
+    required:
+      - "type"
+      - "value"
+      - "msg"
+      - "path"
+      - "location"
+    properties:
+      type:
+        type: "string"
+        description: ""
+      value:
+        type: "string"
+        description: ""
+      msg:
+        type: "string"
+        description: ""
+      path:
+        type: "string"
+        description: ""
+      location:
+        type: "string"
+        description: ""
+responses: {}
+parameters: {}
+tags:
+  - name: "Авторизация (пользователь)"
+    description: "Функции для авторизации пользователя"
+  - name: "Авторизация (для управляющего сайта)"
+    description: "Функция для авторизации пользователя"
